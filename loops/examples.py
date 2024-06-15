@@ -58,6 +58,7 @@ while True:
         break
 
 # 10. While Loop with Continue
+# Uses continue to skip the current iteration and move to the next iteration.
 print("\nWhile Loop with Continue:")
 count = 0
 while count < 5:
@@ -67,6 +68,7 @@ while count < 5:
     print(count)
 
 # 11. For Loop with Break
+# Uses break to exit the loop when a condition is met.
 print("\nFor Loop with Break:")
 for i in range(10):
     if i == 5:
