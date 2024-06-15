@@ -1,6 +1,7 @@
 # Looping examples in Python
 
 # 1. Basic For Loop
+# Uses a for loop with range() to iterate a fixed number of times.
 print("Basic For Loop:")
 for i in range(5):
     print(i)
@@ -12,12 +13,14 @@ for fruit in fruits:
     print(fruit)
 
 # 3. For Loop with Tuple
+# Iterates over elements in a tuple.
 print("\nFor Loop with Tuple:")
 tuple_example = (1, 2, 3, 4)
 for num in tuple_example:
     print(num)
 
 # 4. For Loop with Dictionary
+#  Iterates over keys and values in a dictionary.
 print("\nFor Loop with Dictionary:")
 student = {"name": "John", "age": 21, "major": "Computer Science"}
 for key, value in student.items():
@@ -29,6 +32,7 @@ for char in "Hello":
     print(char)
 
 # 6. For Loop with Index
+# Uses enumerate() to get both index and value while iterating over a list.
 print("\nFor Loop with Index:")
 for index, value in enumerate(fruits):
     print(f"Index: {index}, Value: {value}")
