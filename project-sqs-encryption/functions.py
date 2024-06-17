@@ -1,4 +1,4 @@
-# sqs_encryption_utils.py
+# function.py
 
 import boto3
 import logging
