@@ -1,39 +1,87 @@
-import  boto3
-sqs = boto3.client('sqs')
-def list_queue_urls():
-    return sqs.list_queues(
-    )['QueueUrls']
+# sqs_encryption_utils.py
 
+import boto3
+import logging
+from botocore.exceptions import ClientError
+from typing import List, Dict, Any
 
-def get_kms_key(queue_url):
-    try:
-        response = sqs.get_queue_attributes(
-            QueueUrl= queue_url,
-            AttributeNames=[
-                'KmsMasterKeyId']
-        )
-        return response['Attributes']['KmsMasterKeyId']
-    except Exception as e:
-        # print(f"some error happend \n{e}")
-        return None
-def queue_without_encryption():
-    queue_without_encryption = []
-    for queue_url in list_queue_urls():
-        kms = get_kms_key(queue_url)
-        if not kms:
-            queue_without_encryption.append(queue_url)
-    return queue_without_encryption
+logger = logging.getLogger(__name__)
 
-def encrypt_queue(queue_url, kms_key):
-    response = sqs.set_queue_attributes(
+def assume_role(account_id: str, role_name: str) -> boto3.Session:
+    """
+    Assume an IAM role in the specified account and return a Boto3 session.
+
+    :param account_id: AWS account ID to assume the role in.
+    :param role_name: Name of the role to assume.
+    :return: Boto3 session.
+    """
+    sts_client = boto3.client('sts')
+    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
+    response = sts_client.assume_role(
+        RoleArn=role_arn,
+        RoleSessionName="SQSQueueEncryptionSession"
+    )
+    credentials = response['Credentials']
+    return boto3.Session(
+        aws_access_key_id=credentials['AccessKeyId'],
+        aws_secret_access_key=credentials['SecretAccessKey'],
+        aws_session_token=credentials['SessionToken']
+    )
+
+def list_sqs_queues(session: boto3.Session) -> List[str]:
+    """
+    List all SQS queues in the AWS account.
+
+    :param session: Boto3 session.
+    :return: List of SQS queue URLs.
+    """
+    sqs_client = session.client('sqs')
+    response = sqs_client.list_queues()
+    return response.get('QueueUrls', [])
+
+def get_queue_attributes(sqs_client, queue_url: str) -> dict:
+    """
+    Get attributes of a specific SQS queue.
+
+    :param sqs_client: Boto3 SQS client.
+    :param queue_url: URL of the SQS queue.
+    :return: Dictionary of queue attributes.
+    """
+    response = sqs_client.get_queue_attributes(
+        QueueUrl=queue_url,
+        AttributeNames=['All']
+    )
+    return response.get('Attributes', {})
+
+def encrypt_sqs_queue(sqs_client, queue_url: str, kms_key_id: str) -> None:
+    """
+    Apply server-side encryption to an SQS queue using the specified KMS key.
+
+    :param sqs_client: Boto3 SQS client.
+    :param queue_url: URL of the SQS queue.
+    :param kms_key_id: KMS key ID to use for encryption.
+    """
+    sqs_client.set_queue_attributes(
         QueueUrl=queue_url,
         Attributes={
-            'KmsMasterKeyId': kms_key
+            'KmsMasterKeyId': kms_key_id
         }
     )
-    return response
+    logger.info(f"Applied encryption to queue: {queue_url} using KMS key: {kms_key_id}")
 
+def process_account(account_id: str, role_name: str, kms_key_id: str) -> None:
+    """
+    Process an AWS account by scanning for unencrypted SQS queues and applying encryption.
 
-def run(kms_key):
-    for item in queue_without_encryption():
-        encrypt_queue(item, kms_key)
+    :param account_id: AWS account ID.
+    :param role_name: IAM role name to assume.
+    :param kms_key_id: KMS key ID to use for encryption.
+    """
+    session = assume_role(account_id, role_name)
+    sqs_client = session.client('sqs')
+    queue_urls = list_sqs_queues(session)
+
+    for queue_url in queue_urls:
+        attributes = get_queue_attributes(sqs_client, queue_url)
+        if 'KmsMasterKeyId' not in attributes:
+            encrypt_sqs_queue(sqs_client, queue_url, kms_key_id)
