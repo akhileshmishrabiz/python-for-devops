@@ -36,8 +36,13 @@ def list_sqs_queues(session: boto3.Session) -> List[str]:
     :return: List of SQS queue URLs.
     """
     sqs_client = session.client('sqs')
-    response = sqs_client.list_queues()
-    return response.get('QueueUrls', [])
+    paginator = sqs_client.get_paginator('list_queues')
+    
+    queue_urls = []
+    for page in paginator.paginate():
+        queue_urls.extend(page.get('QueueUrls', []))
+    
+    return queue_urls
 
 def get_queue_attributes(sqs_client, queue_url: str) -> dict:
     """
