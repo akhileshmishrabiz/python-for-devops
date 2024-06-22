@@ -1,6 +1,10 @@
 # SQS Queue Encryption Script
 
-This repository contains a Python script to encrypt unencrypted SQS queues across multiple AWS accounts using a specified KMS key. The script assumes an IAM role in each account to perform the necessary operations.
+This repository contains a Python script to encrypt unencrypted SQS queues using a specified KMS key across multiple AWS accounts. The script assumes an IAM role in each account to perform the necessary operations.
+
+# Medium blog explaining this automation
+
+https://medium.com/@akhilesh-mishra/python-for-devops-automating-sqs-encryption-for-enhanced-security-641a3d22a958
 
 ## Prerequisites
 
@@ -27,7 +31,7 @@ This repository contains a Python script to encrypt unencrypted SQS queues acros
 
 ### Running the Script
 
-1. Ensure you have AWS credentials configured that have the permissions to assume the specified role in each AWS account.
+1. Ensure you have configured AWS credentials with the permissions to assume the specified role in each AWS account.
 
 2. Run the script with the required arguments:
     ```sh
