@@ -6,6 +6,8 @@ This repository contains a Python script to encrypt unencrypted SQS queues using
 
 https://medium.com/@akhilesh-mishra/python-for-devops-automating-sqs-encryption-for-enhanced-security-641a3d22a958
 
+In this blog post, I will teach you how to build simple automation that automatically encrypts all the SQS queues in your AWS account using Python and boto3.
+
 ## Prerequisites
 
 - Python 3.6+
