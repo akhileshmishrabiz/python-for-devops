@@ -30,7 +30,14 @@ def assume_role(account_id: str, role_name: str) -> boto3.Session:
 
 def list_sqs_queues(session: boto3.Session) -> List[str]:
     """
-    List all SQS queues in the AWS account.
+    List all SQS queues in the AWS account using paginators.
+
+    Paginators are a high-level abstraction in Boto3 that allows you to handle responses that are 
+    split across multiple pages. This is especially useful for API calls that may return large 
+    datasets.
+
+    This function creates a paginator for the `list_queues` operation of the SQS client, which 
+    allows it to iterate over all the results pages and collect all the SQS queue URLs.
 
     :param session: Boto3 session.
     :return: List of SQS queue URLs.
@@ -39,7 +46,11 @@ def list_sqs_queues(session: boto3.Session) -> List[str]:
     paginator = sqs_client.get_paginator('list_queues')
     
     queue_urls = []
+    
+    # Iterate through each page of results
     for page in paginator.paginate():
+        # `page` is a dictionary that contains the response elements.
+        # 'QueueUrls' is a key in the response that contains the list of queue URLs.
         queue_urls.extend(page.get('QueueUrls', []))
     
     return queue_urls
