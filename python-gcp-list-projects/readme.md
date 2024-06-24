@@ -1,5 +1,10 @@
 This Python script leverages Google Cloud's Resource Manager v3 API to list all active projects within a specified organization. It defines three main functions: get_folders to recursively fetch all folder IDs, search_projects to retrieve projects within a given folder, and list_projects to compile a list of active project IDs. By running this script, users can easily identify and manage active projects across their organization's hierarchy.
 
+Here is the Medium blog with the instruction:
+
+https://medium.com/living-devops/exploring-google-resource-manager-with-python-v1-0-ea0aeab57c53
+
+
 # Google Cloud Resource Manager Script
 
 This Python script helps in identifying and listing all active projects within a specified Google Cloud organization. It leverages Google Cloud's Resource Manager v3 API to traverse through folders and subfolders, gathering information on all active projects.
