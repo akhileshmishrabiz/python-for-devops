@@ -9,32 +9,25 @@ TO = ['livingdevops@gmail.com', 'akhileshmishra121990@gmail.com']
 
 subject = "this is the subject of email from python - html"
 body_text = """
+<!DOCTYPE html>
 <html>
 <body style="font-family: Arial, sans-serif; color: #333;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px;">
-        <tr>
-            <td>
-                <h1 style="color: #4CAF50;">Join Our DevOps Mentorship Program</h1>
-                <p>Dear Developer,</p>
-                <p>Are you looking to enhance your skills in DevOps and advance your career? Our personalized DevOps mentorship program is designed to guide you through the complexities of modern software development practices.</p>
-                <h2 style="color: #4CAF50;">What We Offer</h2>
-                <ul>
-                    <li>One-on-one mentoring sessions</li>
-                    <li>Hands-on experience with CI/CD pipelines</li>
-                    <li>Insights into cloud infrastructure management</li>
-                    <li>Best practices for automation and monitoring</li>
-                </ul>
-                <p>Whether you're just starting out or looking to refine your skills, our mentorship program will provide you with the knowledge and support you need to succeed.</p>
-                <p style="text-align: center;">
-                    <a href="https://livingdevops.com" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Learn More</a>
-                </p>
-                <p>Best regards,<br>Your Name<br>DevOps Mentor</p>
-            </td>
-        </tr>
-    </table>
+    <h2 style="color: #4CAF50;">Send Email with AWS SES</h2>
+    <ol>
+        <li>Install Boto3: <code style="background-color: #f0f0f0; padding: 2px;">pip install boto3</code></li>
+        <li>Configure AWS credentials.</li>
+        <li>Use the following Python code:</li>
+    </ol>
+    <pre style="background-color: #f9f9f9; padding: 10px; border: 1px solid #ddd;">
+<code style="color: #d14;">import</code> boto3
+ses = boto3.client(<code style="color: #690;">'ses'</code>, region_name=<code style="color: #690;">'your-region'</code>)
+ses.send_email(Source=<code style="color: #690;">'sender@example.com'</code>,
+               Destination={ <code style="color: #d14;">'ToAddresses'</code>: [<code style="color: #690;">'recipient@example.com'</code>]},
+               Message={ <code style="color: #d14;">'Subject'</code>: {<code style="color: #d14;">'Data'</code>: <code style="color: #690;">'Subject'</code>},
+                        <code style="color: #d14;">'Body'</code>: {<code style="color: #d14;">'Text'</code>: {<code style="color: #d14;">'Data'</code>: <code style="color: #690;">'Hello from SES'</code>}}})
+    </pre>
 </body>
 </html>
-
 
 """
 
