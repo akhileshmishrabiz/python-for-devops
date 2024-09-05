@@ -89,7 +89,7 @@ if __name__ == "__main__":
         if age > Expiry:
             body_text = f"""
             User {items[0]} has an expiring key -> {items[1]} which is {items[2]} days old. Please rotate the access key with the following link:
-            <a href="https://us-east-1.console.aws.amazon.com/iam/home?region=ap-south-1#/users/details/{items[0]}?section=security_credentials">Visit Example</a>
+            <a href="https://us-east-1.console.aws.amazon.com/iam/home?region=ap-south-1#/users/details/{items[0]}?section=security_credentials">rotate key</a>
             """
             message = build_msg(TO, FROM, subject, body_text)
             send_email(message, TO)
