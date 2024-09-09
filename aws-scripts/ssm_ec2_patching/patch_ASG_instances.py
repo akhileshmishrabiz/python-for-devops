@@ -1,5 +1,8 @@
 import boto3
 
+ssm = boto3.client('ssm')
+autoscaling = boto3.client('autoscaling')
+
 def get_instance_ids_from_asg(asg_name: str) -> list:
     """
     Retrieves a list of EC2 instance IDs that are part of the specified Auto Scaling group.
@@ -54,6 +57,6 @@ def send_ssm_command(instance_ids: list, association_id: str):
 asg_name = "cluster-training"
 instance_ids = get_instance_ids_from_asg(asg_name)
 
-association_id = "dd668724-35c7-4313-bd65-eeac529a8e23"
-send_ssm_command(instance_ids, )
+association_id = "fd668724-35c7-4313-bd65-eeac529a1923"
+send_ssm_command(instance_ids, association_id )
 
